@@ -1,4 +1,5 @@
 
-public class Message {
-
+public class Message implements Serializable {
+	//Testing a push
+	//Testing a push again
 }
