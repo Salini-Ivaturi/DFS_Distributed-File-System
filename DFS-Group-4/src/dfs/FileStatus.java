@@ -1,3 +1,4 @@
+package dfs;
 
 public enum FileStatus {
 	available,
