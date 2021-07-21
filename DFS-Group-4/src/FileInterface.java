@@ -1,4 +1,7 @@
 
-public class FileInterface {
-
+public interface FileInterface {
+	
+	void processCommands();
+	
 }
+
