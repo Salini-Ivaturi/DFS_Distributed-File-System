@@ -1,19 +1,19 @@
 package dfs;
 
 public class FileMessage extends Message {
-	private File file;
+	private FileItem file;
 
-	public FileMessage(File file) {
+	public FileMessage(FileItem file) {
 		super();
 		this.file = file;
 		this.type = MessageType.UploadRequest;
 	}
 	
-	public File getFile() {
+	public FileItem getFile() {
 		return file;
 	}
 	
-	public void setFile(File file) {
+	public void setFile(FileItem file) {
 		this.file = file;
 	}
 

@@ -13,7 +13,7 @@ public class MessageHandler {
 		objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 	}
 	
-	public void SendFile(File file, String ipAddress) {
+	public void SendFile(FileItem file, String ipAddress) {
 		Message FileMessage = new Message(file, MessageType.File);
 		try {
 			objectOutputStream.writeObject(FileMessage);
