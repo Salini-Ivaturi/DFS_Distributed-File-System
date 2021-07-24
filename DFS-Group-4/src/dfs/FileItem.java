@@ -1,7 +1,7 @@
 package dfs;
 import java.util.Date;
 
-public class File implements Comparable {
+public class FileItem implements Comparable {
 	
 	// Meta Data:
 	private String fName;	 // name of this file
@@ -11,7 +11,7 @@ public class File implements Comparable {
 	private String filePath; // file path in actual server directory
 
 	
-	public File(String fName, Date upDate, int filesize, String fPath) {
+	public FileItem(String fName, Date upDate, int filesize, String fPath) {
 		this.fName = fName;
 	    this.uploadDate = upDate;
 	    this.sizeOfFile = filesize;
@@ -64,7 +64,7 @@ public class File implements Comparable {
 	
 	@Override
 	public int compareTo(Object object) {
-		File fItem = (File) object;
+		FileItem fItem = (FileItem) object;
 		return fName.compareTo(fItem.getFileName());
 	}
 

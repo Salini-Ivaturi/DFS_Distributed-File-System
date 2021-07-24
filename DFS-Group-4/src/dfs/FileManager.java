@@ -8,11 +8,11 @@ public class FileManager {
 
 	private int numFiles;
 	
-	private File[] filesArray;
+	private FileItem[] filesArray;
 	
 	public FileManager() {
 		numFiles = 0;
-		filesArray = new File[0];
+		filesArray = new FileItem[0];
 	}
 	
 	public String toString() {
