@@ -12,13 +12,15 @@ class Client {
 	{
 		// establish a connection by providing host and port
 		// number
-		//loginInterface.promptMenu();
+		//LoginHandler login = loginInterface.loginStatus();
+		// if (login == true) do the client and server thingies
 		try (Socket socket = new Socket("localhost", 1234)) {			
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-			Message testMessage = new Message();
-			objectOutputStream.writeObject(testMessage);
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());		// File not object
+			ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());		// File not object
+			LoginMessage loginMessage = new LoginMessage("peter", "abcd1234");
+			objectOutputStream.writeObject(loginMessage);
 			Message receivedMessage;
+			boolean clientVerified = false;
 			while (true) {
 				receivedMessage = (Message) objectInputStream.readObject();
 				System.out.println("Message received.");
@@ -27,6 +29,7 @@ class Client {
 				if (receivedMessage.getType()==MessageType.LoginRequest) {
 					if (receivedMessage.getStatus()==MessageStatus.Success) {
 						System.out.println("Login Success!");
+						clientVerified = true;
 						//Open up the client GUI with options for Upload, Download, and Logout here
 					} else {
 						System.out.println("Login failed. Please input correct credentials");
