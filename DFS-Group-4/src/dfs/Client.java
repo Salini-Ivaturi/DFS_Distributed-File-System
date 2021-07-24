@@ -5,12 +5,14 @@ import java.net.*;
 
 // Client class
 class Client {
-	
+	private LoginManager loginManager = new LoginManager();
+	//private LoginInterface loginInterface = new LoginInterface(loginManager);
 	// driver code
 	public static void main(String[] args)
 	{
 		// establish a connection by providing host and port
 		// number
+		//loginInterface.promptMenu();
 		try (Socket socket = new Socket("localhost", 1234)) {			
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
