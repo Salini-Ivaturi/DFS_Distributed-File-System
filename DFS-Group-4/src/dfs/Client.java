@@ -3,6 +3,8 @@ package dfs;
 import java.io.*;
 import java.net.*;
 
+import javax.swing.JOptionPane;
+
 // Client class
 class Client {
 	private LoginManager loginManager = new LoginManager();
@@ -30,7 +32,40 @@ class Client {
 					if (receivedMessage.getStatus()==MessageStatus.Success) {
 						System.out.println("Login Success!");
 						clientVerified = true;
-						//Open up the client GUI with options for Upload, Download, and Logout here
+						String[] commands = { 
+							 	"Download File",
+								"Upload File",
+								"Logout",
+							};
+							int choice;
+							FileGUI fileInterface;
+							do {
+								 choice = JOptionPane.showOptionDialog(null,
+									 "Select an option:",
+									 "Distributed File System", 
+									 JOptionPane.YES_NO_CANCEL_OPTION, 
+									 JOptionPane.QUESTION_MESSAGE, 
+									 null, 
+									 commands,
+									 commands[commands.length - 1]);
+								 switch (choice) {
+								 	case 0: 
+								 		fileInterface = new FileGUI();
+								 		//FileMessage DLRequest = new FileMessage(someFile, MessageType.DownloadRequest);
+								 		//objectOutputStream.writeObject(DLRequest);
+								 		break;
+								 	case 1:  
+								 		fileInterface = new FileGUI();
+								 		//FileMessage ULRequest = new FileMessage(someFile, MessageType.UploadRequest);
+								 		//objectOutputStream.writeObject(DLRequest);
+								 		break;
+								 	case 2: 
+								 		Message logoutMsg = new Message("Logout");
+								 		objectOutputStream.writeObject(logoutMsg);
+								 		break;
+								 	default:  // do nothing
+								 }
+							} while (choice!=commands.length-1);
 					} else {
 						System.out.println("Login failed. Please input correct credentials");
 						//Don't do anything, just prompt for credentials again
@@ -39,6 +74,7 @@ class Client {
 			}
 		}
 		catch (IOException e) {
+			System.out.println("No server found. Exiting...");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
