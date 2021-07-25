@@ -3,11 +3,14 @@ package dfs;
 import java.io.*;
 import java.net.*;
 
+
 // Server class
 class Server {
 	private AccountManager accountManager = new AccountManager();
 	private static Socket[] node = new Socket[10];
 	private static int numSockets = 0;
+	
+	private static ObjectOutputStream[] outStream = new ObjectOutputStream[10];
 	public static void main(String[] args)
 	{
 		ServerSocket server = null;
@@ -32,8 +35,7 @@ class Server {
 				System.out.println("New client connected: " + client.getInetAddress().getHostAddress() + ":" + client.getPort());
 				System.out.println("----------------------------------------------");
 				// create a new thread object
-				ClientHandler clientSock
-					= new ClientHandler(client);
+				ClientHandler clientSock = new ClientHandler(client);
 
 				// This thread will handle the client
 				// separately
@@ -58,13 +60,16 @@ class Server {
 	// ClientHandler class
 	private static class ClientHandler implements Runnable {
 		private final Socket clientSocket;
+		private int thisSocket;
 		
 
 		// Constructor
-		public ClientHandler(Socket socket)
+		public ClientHandler(Socket socket) throws IOException
 		{
 			this.clientSocket = socket;
-			node[numSockets] = socket;
+			thisSocket = numSockets;
+			node[thisSocket] = socket;
+			outStream[thisSocket] = new ObjectOutputStream(clientSocket.getOutputStream());
 			numSockets++;
 		}
 
@@ -72,13 +77,14 @@ class Server {
 		{
 			try {
 				ObjectInputStream objectInputStream = new ObjectInputStream(clientSocket.getInputStream());
-				ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 				boolean clientVerified = false;
 				while (true) {
 					Message receivedMessage;
 					try {
 						receivedMessage = (Message) objectInputStream.readObject();
+						System.out.println("This socket: " + thisSocket);
 						System.out.println("----------------------------------------------");
+						System.out.println(java.time.LocalTime.now());
 						System.out.println("Incoming Message received from client " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());
 						System.out.println("Incoming Message status: " + receivedMessage.getStatus());
 						System.out.println("Incoming Message text: " + receivedMessage.getText());
@@ -107,10 +113,10 @@ class Server {
 								} else if (receivedMessage.getType()==MessageType.UploadRequest) {
 									receivedMessage = (FileMessage) receivedMessage;
 									//for now, just check that this actually gets sent
-									ObjectOutputStream otherOutStream = new ObjectOutputStream(node[0].getOutputStream());
+									outStream[0].writeObject(receivedMessage);
+									receivedMessage.setStatus(MessageStatus.Success);
 									receivedMessage.setText("File sent to " + node[0].getInetAddress().getHostAddress() + ":" +  node[0].getPort());
 									System.out.println("Sent uploaded file to " + node[0].getInetAddress().getHostAddress() + ":" + node[0].getPort());
-									otherOutStream.writeObject(receivedMessage);
 									//pick a node and then send the file to that node
 								}
 							} else {
@@ -123,8 +129,8 @@ class Server {
 						System.out.println("Outgoing Message text: " + receivedMessage.getText());
 						System.out.println("Outgoing Message type: " + receivedMessage.getType());
 						System.out.println("----------------------------------------------");
-						objectOutputStream.writeObject(receivedMessage);
-						objectOutputStream.flush();
+						outStream[thisSocket].writeObject(receivedMessage);
+						outStream[thisSocket].flush();
 					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
