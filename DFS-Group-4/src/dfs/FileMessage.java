@@ -1,19 +1,21 @@
 package dfs;
 
-public class FileMessage extends Message {
-	private FileItem file;
+import java.io.File;
 
-	public FileMessage(FileItem file, MessageType type) {
+public class FileMessage extends Message {
+	private File file;
+
+	public FileMessage(File file, MessageType type) {
 		super();
 		this.file = file;
 		this.type = type;
 	}
 	
-	public FileItem getFile() {
+	public File getFile() {
 		return file;
 	}
 	
-	public void setFile(FileItem file) {
+	public void setFile(File file) {
 		this.file = file;
 	}
 

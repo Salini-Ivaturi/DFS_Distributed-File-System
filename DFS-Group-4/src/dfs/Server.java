@@ -29,10 +29,8 @@ class Server {
 
 				// Displaying that new client is connected
 				// to server
-				System.out.println("New client connected: "
-								+ client.getInetAddress()
-										.getHostAddress());
-
+				System.out.println("New client connected: " + client.getInetAddress().getHostAddress() + ":" + client.getPort());
+				System.out.println("----------------------------------------------");
 				// create a new thread object
 				ClientHandler clientSock
 					= new ClientHandler(client);
@@ -80,11 +78,12 @@ class Server {
 					Message receivedMessage;
 					try {
 						receivedMessage = (Message) objectInputStream.readObject();
-						System.out.println("-----------------------------------------");
-						System.out.println("Message received from IP " + clientSocket.getInetAddress());
-						System.out.println("Message status: " + receivedMessage.getStatus());
-						System.out.println("Message text: " + receivedMessage.getText());
-						System.out.println("Message type: " + receivedMessage.getType());
+						System.out.println("----------------------------------------------");
+						System.out.println("Incoming Message received from client " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());
+						System.out.println("Incoming Message status: " + receivedMessage.getStatus());
+						System.out.println("Incoming Message text: " + receivedMessage.getText());
+						System.out.println("Incoming Message type: " + receivedMessage.getType());
+						System.out.println("");
 						
 						if (receivedMessage.getType()==MessageType.LoginRequest) {
 							receivedMessage = (LoginMessage) receivedMessage;
@@ -96,7 +95,7 @@ class Server {
 							clientVerified = true;
 							
 						} else if (receivedMessage.getType()==MessageType.Communication && receivedMessage.getText().equals("Logout")) {
-							System.out.println(clientSocket.getInetAddress() + " disconnected. Closing thread...");
+							System.out.println(clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort() + " disconnected. Closing thread...");
 							break;
 						} else {
 							if (clientVerified==true) {
@@ -107,6 +106,11 @@ class Server {
 									//to the requesting node
 								} else if (receivedMessage.getType()==MessageType.UploadRequest) {
 									receivedMessage = (FileMessage) receivedMessage;
+									//for now, just check that this actually gets sent
+									ObjectOutputStream otherOutStream = new ObjectOutputStream(node[0].getOutputStream());
+									receivedMessage.setText("File sent to " + node[0].getInetAddress().getHostAddress() + ":" +  node[0].getPort());
+									System.out.println("Sent uploaded file to " + node[0].getInetAddress().getHostAddress() + ":" + node[0].getPort());
+									otherOutStream.writeObject(receivedMessage);
 									//pick a node and then send the file to that node
 								}
 							} else {
@@ -114,10 +118,11 @@ class Server {
 								receivedMessage.setStatus(MessageStatus.Fail); //Send the message back to the client with status "Success"
 							}
 						}
-						System.out.println("\nSending reply to IP " + clientSocket.getInetAddress());
-						System.out.println("Message status: " + receivedMessage.getStatus());
-						System.out.println("Message text: " + receivedMessage.getText());
-						System.out.println("Message type: " + receivedMessage.getType());
+						System.out.println("\nSending reply to IP " + clientSocket.getInetAddress().getHostAddress() + ":" + clientSocket.getPort());
+						System.out.println("Outgoing Message status: " + receivedMessage.getStatus());
+						System.out.println("Outgoing Message text: " + receivedMessage.getText());
+						System.out.println("Outgoing Message type: " + receivedMessage.getType());
+						System.out.println("----------------------------------------------");
 						objectOutputStream.writeObject(receivedMessage);
 						objectOutputStream.flush();
 					} catch (ClassNotFoundException e) {
