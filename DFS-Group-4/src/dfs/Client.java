@@ -23,8 +23,10 @@ class Client {
 			objectOutputStream.writeObject(loginMessage);
 			Message receivedMessage;
 			boolean clientVerified = false;
+			
 			while (true) {
 				receivedMessage = (Message) objectInputStream.readObject();
+				System.out.println("---------------------");
 				System.out.println("Message received.");
 				System.out.println("Message status: " + receivedMessage.getStatus());
 				System.out.println("Message text: " + receivedMessage.getText());
@@ -62,6 +64,7 @@ class Client {
 								 	case 2: 
 								 		Message logoutMsg = new Message("Logout");
 								 		objectOutputStream.writeObject(logoutMsg);
+								 		System.out.println("Sent disconnect notification to Server.");
 								 		break;
 								 	default:  // do nothing
 								 }
@@ -75,7 +78,7 @@ class Client {
 		}
 		catch (IOException e) {
 			System.out.println("No server found. Exiting...");
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -20,6 +20,7 @@ class Server {
 
 			// running infinite loop for getting
 			// client request
+			System.out.println("Started listening for messages...");
 			while (true) {
 
 				// socket object to receive incoming client
@@ -79,6 +80,7 @@ class Server {
 					Message receivedMessage;
 					try {
 						receivedMessage = (Message) objectInputStream.readObject();
+						System.out.println("-----------------------------------------");
 						System.out.println("Message received from IP " + clientSocket.getInetAddress());
 						System.out.println("Message status: " + receivedMessage.getStatus());
 						System.out.println("Message text: " + receivedMessage.getText());
@@ -92,7 +94,10 @@ class Server {
 							receivedMessage.setText("Credentials verified.");
 							receivedMessage.setStatus(MessageStatus.Success); //Send the message back to the client with status "Success"
 							clientVerified = true;
-							System.out.println("Sending reply to IP " + clientSocket.getInetAddress());
+							
+						} else if (receivedMessage.getType()==MessageType.Communication && receivedMessage.getText().equals("Logout")) {
+							System.out.println(clientSocket.getInetAddress() + " disconnected. Closing thread...");
+							break;
 						} else {
 							if (clientVerified==true) {
 								if (receivedMessage.getType()==MessageType.DownloadRequest) {
@@ -109,6 +114,10 @@ class Server {
 								receivedMessage.setStatus(MessageStatus.Fail); //Send the message back to the client with status "Success"
 							}
 						}
+						System.out.println("\nSending reply to IP " + clientSocket.getInetAddress());
+						System.out.println("Message status: " + receivedMessage.getStatus());
+						System.out.println("Message text: " + receivedMessage.getText());
+						System.out.println("Message type: " + receivedMessage.getType());
 						objectOutputStream.writeObject(receivedMessage);
 						objectOutputStream.flush();
 					} catch (ClassNotFoundException e) {
