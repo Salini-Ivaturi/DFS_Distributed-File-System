@@ -1,3 +1,6 @@
+package dfs;
+
+import org.junit.platform.commons.util.StringUtils;
 
 import javax.swing.*;
 
@@ -12,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-
+import dfs.Constants;
 
 public class RegistrationScreen extends JFrame implements ActionListener {
 
@@ -104,13 +107,19 @@ public class RegistrationScreen extends JFrame implements ActionListener {
 
     public boolean isValidRegistrationDetails(Account userDetail){
 
-        List<Account> accounts = Util.getAccounts();
-        for(Account account: accounts){
-            if(userDetail.getUserName().equals(account.getUserName())){
+       List<Account> accounts = Util.getAccounts();
+       if(userDetail.getUserName()==null || userDetail.getUserName().length()==0 ||
+        userDetail.getPassword()==null || userDetail.getPassword().length()==0 ||
+        userDetail.getSecurityQuestion()==null || userDetail.getSecurityQuestion().length()==0)
+       {
+           return false;
+       }
+       for(Account account: accounts){
+           if(userDetail.getUserName().equals(account.getUserName())){
                 return false;
-            }
-        }
-        return true;
+           }
+       }
+       return true;
     }
 
 

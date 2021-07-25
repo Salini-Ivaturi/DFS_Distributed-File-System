@@ -1,4 +1,6 @@
+package dfs;
 
+import org.junit.platform.commons.util.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +14,7 @@ public class Util {
 
     public static Account createAccount(String data){
         Account account = null;
-        if(data!=null && data.length()>0){
+        if(StringUtils.isNotBlank(data)){
             String[] params = data.split(" ");
             if(params.length==3)
                 account = new Account(params[0], params[1], params[2]);

@@ -1,3 +1,6 @@
+package dfs;
+
+import org.junit.platform.commons.util.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.Container;
@@ -95,7 +98,7 @@ public class ForgotPasswordScreen extends JFrame implements ActionListener {
         String password = new String(passwordField.getPassword());;
         String confirmPassword = new String(confirmPasswordField.getPassword());;
         String securityAnswer = securityQuestionField.getText();
-        if (e.getSource() == submitButton){
+         if (e.getSource() == submitButton){
             if(!password.equals(confirmPassword)){
                 JOptionPane.showMessageDialog(this, "Password and Confirm password should be same");
             }
@@ -105,17 +108,14 @@ public class ForgotPasswordScreen extends JFrame implements ActionListener {
             else{
                 if(updatePassword(username, password, securityAnswer))
                     JOptionPane.showMessageDialog(this, "password updated successfully");
-                new LoginScreen();
-                this.dispose();
+
+                    LoginScreen();
+                    this.dispose();
+
             }
-        }
-        else if(e.getSource() == loginButton){
-            LoginScreen frame=new LoginScreen();
-            frame.setTitle("Login Form");
-            frame.setVisible(true);
-            frame.setBounds(10,10,500,600);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setResizable(false);
+         }
+         else if(e.getSource() == loginButton){
+             LoginScreen();
             this.dispose();
         }
     }
@@ -163,6 +163,16 @@ public class ForgotPasswordScreen extends JFrame implements ActionListener {
             e.printStackTrace();
         }
 
+    }
+
+    private void LoginScreen() {
+        LoginScreen frame=new LoginScreen();
+        frame.setTitle("Login Form");
+        frame.setVisible(true);
+        frame.setBounds(10,10,500,600);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        this.dispose();
     }
 
 }

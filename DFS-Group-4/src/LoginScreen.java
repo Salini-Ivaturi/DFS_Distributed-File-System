@@ -1,3 +1,5 @@
+package dfs;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -77,6 +79,7 @@ public class LoginScreen extends JFrame implements ActionListener {
             if (isValidLoginDetails(userText, pwdText)) {
                 JOptionPane.showMessageDialog(this, "Login Successful");
                 //connect to client
+
 
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid Username or Password");
